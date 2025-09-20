@@ -13,33 +13,29 @@ communication actions in this array. See environment.py for more details.
 """
 
 
-def make_env(scenario_name):
+def make_env():
 
     from environment.PlanEnv import PlanEnv
     import configparser
     import os
 
-    config = configparser.ConfigParser()
-    config_path = os.path.join(os.getcwd(), f'conf/env.properties')
-    config.read(config_path)
+    config_env = configparser.ConfigParser()
+    config_env.read(os.path.join(os.getcwd(), f'conf/hrcl.properties'))
+    is_group_plan = bool(config_env.get('env', 'isGroupPlans'))
+    is_group_behavior = bool(config_env.get('env', 'isGroupBehaviorRanges'))
+    plans_group_num = int(config_env.get('env', 'numPlanGroups'))
+    behavior_ranges_num = int(config_env.get('env', 'numBehaviorRanges'))
+    steps_num = int(config_env.get('env', 'numSteps'))
+    data_num = int(config_env.get('env', 'numTargets'))
+    sigma = float(config_env.get('env', 'weightForBalance'))
 
-    agents_num = int(config.get('env', 'numAgents'))
-    plan_dim = int(config.get('env', 'planDim'))
-    plans_group_num = int(config.get('env', 'numPlanGroups'))
-    behavior_ranges_num = int(config.get('env', 'numBehaviorRanges'))
-    steps_num = int(config.get('env', 'numSteps'))
-    plans_num = int(config.get('env', 'numPlans'))
-    data_num = int(config.get('env', 'numTargets'))
-    sigma = float(config.get('env', 'weightForBalance'))
-    global_cost_func = config.get('env', 'globalCostFunction')
-    is_group_plan = (plans_group_num != 1)
-    is_group_behavior = (behavior_ranges_num != 1)
-
-    dataset_name = None
-    if scenario_name == 'synthetic':
-        dataset_name = 'gaussian'
-    if scenario_name == 'energy':
-        dataset_name = 'energy'
+    config_system = configparser.ConfigParser()
+    config_system.read(os.path.join(os.getcwd(), f'conf/epos.properties'))
+    dataset_name = config_system.get('system', 'numAgents')
+    agents_num = int(config_system.get('system', 'numAgents'))
+    plan_dim = int(config_system.get('system', 'planDim'))
+    plans_num = int(config_system.get('system', 'numPlans'))
+    global_cost_func = config_system.get('system', 'globalCostFunction')
 
     env_config = {
         "datasets": dataset_name,

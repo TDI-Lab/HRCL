@@ -204,9 +204,6 @@ class Runner_MAPPO_MPE:
 
 
 if __name__ == '__main__':
-    # Environment Settings: synthetic, energy, UAV
-    env_name = "synthetic"
-
     # MAPPO Hyperparameters
     parser = argparse.ArgumentParser("Hyperparameters Setting for MAPPO")
     parser.add_argument("--max_train_steps", type=int, default=400000, help="Maximum number of training steps")
@@ -241,6 +238,8 @@ if __name__ == '__main__':
     parser.add_argument("--use_value_clip", type=float, default=False, help="Whether to use value clip.")
     args = parser.parse_args()
 
+    # Environment Settings: synthetic, energy, UAV
+    env_name = "synthetic"
     runner = Runner_MAPPO_MPE(args, env_name=env_name, number=1, seed=0)
     print("Start to train the model")
     runner.run()

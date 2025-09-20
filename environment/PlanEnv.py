@@ -71,7 +71,7 @@ class PlanEnv(gym.Env):
         self.response_total = np.zeros(self.dimension)
 
         # Set the target game
-        data_path = os.path.join(os.getcwd(), f'datasets/Map/{self.dataset}.csv')
+        data_path = os.path.join(os.getcwd(), f'datasets/{self.dataset}.csv')
         targets_arr = np.array(pd.read_csv(data_path, header=None))
 
         data_id = random.choice(self.data_idx_test) if evaluate else random.choice(self.data_idx_train)
@@ -145,10 +145,10 @@ class PlanEnv(gym.Env):
                 # The plans number per agent is plansNum / actions
                 plans_format_input = [str(a) for a in action_grouping]
                 plans_format_input = ",".join(plans_format_input)
-                command = ['java', '-jar', 'IEPOS_input.jar',
+                command = ['java', '-jar', 'IEPOS.jar',
                            f'{self.phase}', 'True', f'{plans_format_input}']
             else:
-                command = ['java', '-jar', 'IEPOS_input.jar', f'{self.phase}', 'False']
+                command = ['java', '-jar', 'IEPOS.jar', f'{self.phase}', 'False']
 
             epos_output = subprocess.check_output(command, stderr=subprocess.STDOUT, text=True)
             # 3. Get the results from EPOS: global cost, local cost, and global response
